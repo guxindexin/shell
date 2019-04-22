@@ -27,31 +27,4 @@ yum install dos2unix net-tools httpie ftp wget vim htop lrzsz zip unzip ntpdate 
 echo '*/30 * * * * /usr/sbin/ntpdate time7.aliyun.com >/dev/null 2>&1' > /tmp/crontab2.tmp
 crontab /tmp/crontab2.tmp
 
-echo '安装jdk8'
-rm -f `which java`
-mkdir /home/java/;cd /home/java/
-wget ftp://222.92.212.125:64300/software/jdk/jdk-8u144-linux-x64.tar.gz --ftp-user=vortex --ftp-password=ftp12#$
-tar -zxvf jdk-8u144-linux-x64.tar.gz
-echo 'export JAVA_HOME=/home/java/jdk1.8.0_144' >> /etc/profile
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile
-echo 'export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar' >> /etc/profile
-source /etc/profile
-ln -s /home/java/jdk1.8.0_144/bin/jps /bin/jps
-ln -s /home/java/jdk1.8.0_144/bin/java /bin/java
-
-echo '安装saltstack'
-#yum install salt-minion -y
-cd /usr/local/src/
-curl -Ou caofei:123456 ftp://caofei@222.92.212.125/centos/rpm/salt/salt-2018.3.4-1.el7.noarch.rpm
-curl -Ou caofei:123456 ftp://caofei@222.92.212.125/centos/rpm/salt/salt-minion-2018.3.4-1.el7.noarch.rpm
-yum install -y salt-2018.3.4-1.el7.noarch.rpm
-yum install -y salt-minion-2018.3.4-1.el7.noarch.rpm
-sed -i s/"^#master:.*"/"master: salt.vortexinfo.cn"/ /etc/salt/minion
-sed -i s/"^#master_port: 4506"/"master_port: 14506"/ /etc/salt/minion 
-sed -i s/"^#id:"/"id: $saltid"/ /etc/salt/minion
-systemctl start salt-minion && systemctl enable salt-minion
-
-#echo '安装docker'
-#curl -s http://kod.vortexinfo.cn:8082/ks/sh/docker.sh |bash
-
 chmod +x /etc/rc.d/rc.local
